@@ -1,6 +1,3 @@
-from ast import Global
-import math
-import datetime as dt
 import tkinter as tk
 from functools import partial
 import mysql.connector as msc
@@ -27,7 +24,7 @@ def user_ver(status, username, password):
 
 def Adding_patient():
     win = Tk()
-    win.geometry('1360x800')
+    win.geometry('1920x1080')
     win.title("PATIENT UPDATE PAGE ")
 
     label1 = Label(win, text="STAFF PROFILE AND PATIENT INFORMATION ", font=("Arial", 32, "bold"), border=10,
@@ -180,11 +177,19 @@ def Adding_patient():
 
 
 def billing_page(p_code):
+
+    con = msc.connect(host='localhost', user='root', passwd='onkar123', database='pyproject')
+    cur = con.cursor()
+
+    sql6 = "select p.dosage*m.cost from prescription p, medicine m where (p.Med_Name=m.Med_name) and p.Patient_No='P003';"
+    cur.execute(sql6)
+    Med_Lab = str(cur.fetchall()[0][0])    
+    
     bill = Toplevel()
     # In the patients table the duration of stay will be added then the patient code is entered here and the exit is changed from n to y
     # The main labels
 
-    bill.geometry('1360x800')
+    bill.geometry('1920x1080')
 
     First = bill.title("Billing Page")
 
@@ -209,12 +214,8 @@ def billing_page(p_code):
     P_code_var = Label(bill, text=P_code,font=('Arial', 30, 'bold'), bg='lightgrey', fg='blue')
     P_code_var.grid(row=3, column=6)
 
-    Med_lab = StringVar()
-    Meds_label = Label(bill, text='100',font=('Arial', 30, 'bold'), bg='lightgrey', fg='blue')
+    Meds_label = Label(bill, text= Med_Lab,font=('Arial', 30, 'bold'), bg='lightgrey', fg='blue')
     Meds_label.grid(row=5, column=6)
-
-    con = msc.connect(host='localhost', user='root', passwd='onkar123', database='pyproject')
-    cur = con.cursor()
 
     sql5 = "SELECT Doc_code from patients where Code = '{0}' ".format(p_code.get())
     res1 = cur.execute(sql5)
@@ -232,7 +233,7 @@ def billing_page(p_code):
 def Edit_page_for_docs(d_code, p_code):
     ep = Toplevel()
     ep.title("Doctor's Editing Page")
-    ep.geometry('1360x800')
+    ep.geometry('1920x1080')
 
     doc_label = Label(ep, text="THE PATIENT EVALUATION PAGE FOR DOCTORS", font=("Arial", 40, "bold"), border=10,relief=GROOVE, bg="lightgrey", fg="blue")
     doc_label.grid(row=0, column=0, columnspan=4, padx=50, pady=25)
@@ -286,9 +287,9 @@ def Edit_page_for_docs(d_code, p_code):
         con = msc.connect(host='localhost', user='root', passwd='onkar123', database='pyproject')
         cur = con.cursor()
 
-        # sql4 = "UPDATE patients SET Exit= '{0}' where Code = '{1}'".format(exit_entry.get(),p_code.get())
-        # cur.execute(sql4)
-        # con.commit()
+        sql4 = "UPDATE patients SET Date_of_Exit= '{0}' where Code = '{1}'".format(exit_entry.get(),p_code.get())
+        cur.execute(sql4)
+        con.commit()
 
         billing_page(p_code)
 
@@ -326,7 +327,7 @@ def Open_New_Window(status, rows):
     else:
         new = Toplevel(root)
         new.title("Error Page")
-        new.geometry("1360x800")
+        new.geometry("1920x1080")
         Label(new, text="ERROR WHILE LOGIN\nYou are attempting to use an unauthorised login.\nThis incident has been reported to the relevant authorities.\nPlz try again or contact Administrator -9837276362.",font=("Arial",35,"bold"),border=18,relief=GROOVE,bg="lightgrey",fg="blue").pack()
 
 
@@ -336,7 +337,7 @@ def choose_patient(doc_info):
     global Choose_var
 
     uno = Tk()
-    uno.geometry('1360x800')
+    uno.geometry('1920x1080')
 
     decide = Label(uno,text="NUMBER OF PATIENTS ASSIGNED TO THE DOCTOR",font=("Arial", 40, "bold"), border=10,relief=GROOVE, bg="lightgrey", fg="blue")
     decide.grid(row=0, column=3, columnspan=5, padx=20, pady=50)
@@ -379,7 +380,7 @@ def Patient_list_for_doc(doc_code):
 status = False
 root = Tk()
 root.title('Patient Management System')
-root.geometry('1360x800')
+root.geometry('1920x1080')
 
 
 try:
